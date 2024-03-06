@@ -1,0 +1,71 @@
+{
+    "name": "bytes4run/modular",
+    "description": "Skeleton for a modular PHP web applications base on MVC pattern with Vite for auto web refresh and Tailwindcss for a modern design",
+    "type": "project",
+    "version": "2.0.0",
+    "keywords": [
+        "modular",
+        "mvc",
+        "php",
+        "framework",
+        "web",
+        "application",
+        "api",
+        "skeleton"
+    ],
+    "require": {
+        "php": "^8.1",
+        "smarty/smarty": "^4.3",
+        "vlucas/phpdotenv": "^5.6",
+        "firebase/php-jwt": "^6.10",
+        "phpunit/phpunit": "^10.5",
+        "phpmailer/phpmailer": "^6.9",
+        "psr/log": "^3.0",
+        "psr/http-client": "^1.0",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.8",
+        "ramsey/uuid": "^4.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "B4R\\": "./app",
+            "Kernel\\": "./app/core",
+            "Modules\\": "./app/modules"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "./tests"
+        }
+    },
+    "license": "Proprietary",
+    "optimize-autoloader": true,
+    "authors": [
+        {
+            "name": "snithfferx",
+            "email": "snithfferx@outlook.com"
+        },
+        {
+            "name": "Jorge Echeverria",
+            "email": "jecheverria@bytes4run.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "source": {
+        "type": "git",
+        "url": "https://github.com/repository/bytes4run/modular.git",
+        "reference": "0.0.1"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"file_exists('configs/.env') || copy('configs/.env.example', 'configs/.env');\"",
+            "@php -r \"file_exists('configs/config.json') || copy('configs/config.json.example', 'configs/config.json');\""
+        ],
+        "testing": "vendor/bin/phpunit tests"
+    },
+    "readme": "README.md"
+}

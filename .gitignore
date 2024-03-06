@@ -1,0 +1,12 @@
+# IDE's
+.vs/
+.vscode/
+.idea/
+nbproject/
+# Directories
+vendor/
+node_modules/
+# Files
+*.log
+*.sql
+.phpunit.result.cache
