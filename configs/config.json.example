@@ -1,0 +1,43 @@
+{
+    "app_name":"APP_NAME",
+    "app_description":"APP_DESCRIPTION",
+    "app_author":"APP_AUTHOR",
+    "app_company":"COMPANY",
+    "app_company_url":"http:\/\/www.example.com\/",
+    "app_start_year":"2022",
+    "app_enviroment":"dev",
+    "app_default_ctr":"home",
+    "app_url":"http:\/\/localhost\/",
+    "app_version":"0.0.0",
+    "app_short_version":"0.0",
+    "app_language":"es",
+    "app_logo":"app_logo.png",
+    "app_logo_mini":"app_logo_mini.png",
+    "app_tile_color":"#FFFFFF",
+    "app_theme_color":"#FFFFFF",
+    "app_background_color":"#333333",
+    "app_view":{
+        "engine":"smarty",
+        "theme":"adminlte"
+    },
+    "app_collaboration":[
+        {
+            "url":"https:\/\/www.bytes4run.com\/",
+            "name":"Bytes4Run"
+        }
+    ],
+    "theme":[{
+        "url":"https:\/\/www.adminlte.io\/",
+        "name":"AdminLTE 3"
+    }],
+    "technology":[
+        {
+            "url":"https:\/\/www.php.net\/",
+            "name":"PHP 7.4"
+        },
+        {
+            "url":"https:\/\/www.smarty.net\/",
+            "name":"SMARTY 4.3"
+        }
+    ]
+}

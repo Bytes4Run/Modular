@@ -2,8 +2,8 @@
     /**
      * Global variables Definer
      * @description Class to define the global constant variables of the application
-     * @author Jorge Echeverria <jecheverria@bytes4run.com>
      * @category Helper
+     * @author Jorge Echeverria <jecheverria@bytes4run.com>
      * @package Kernel\helpers\Definer
      * @version 1.0.0
      */

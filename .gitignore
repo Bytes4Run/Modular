@@ -10,3 +10,4 @@ node_modules/
 *.log
 *.sql
 .phpunit.result.cache
+*.code-workspace
