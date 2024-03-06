@@ -1,0 +1,48 @@
+# Bytes4Run licencia de usuario final.
+
+Copyright (c) 2018-2023 Bytes4Run
+La siguiente licencia es otorgada bajo ningún cargo extra al impuesto sobre la compra de la aplicación, programa, módulo;
+las restricciones aplicadas a los derechos de uso, copia, modificación, fusión, publicación, distribución, sublicenciamiento,
+y/o venta de copias del programa, el permiso a personas a quienes se les proporcione dicha aplicación, están sujetos a
+lo siguiente:
+
+ . Los derechos de copia y aviso de permiso deben ser adjuntados a toda copia que se distribuya o hacer referenciado en
+   toda porción utilizada.
+ . Agregar el nombre de la empresa en los créditos de la sub aplicación resultante, así como el año en el que se hace
+   referencia.
+ . Anexar a medida de lo posible los créditos a los contribuidores de dicha aplicación.
+
+Lo anterior es una versión modificada de “la licencia de copia y distribución libre de MIT (Instituto Técnico de
+Massachussets)” esto sólo es aplicado a la versión base de la aplicación en conjunto con los módulos básicos de la misma.
+
+ . Modular: Aplicación base que se utilizará como marco de trabajo sobre la cual está construirá la aplicación web, api,
+   servicio.
+ . Módulos base: Los módulos base de esta aplicación consisten en la administración de usuarios (accounts) y presentación
+   de inicio (home), demás módulos o modificaciones no están gobernadas bajo esta licencia. Abocarse a la licencia de
+   cada módulo o script.
+
+La empresa sólo se responsabiliza de mantener actualizadas las bases de la aplicación no así la aplicación resultante del
+uso de ésta. El mantenimiento de las dependencias necesarias para el uso de la apliación así como pero no limitado, su
+licenciamiento y derechos de uso, son responsabilidad de la(s) entidad(es) que las crearon.
+La empresa no se hará responsable del mal uso de la aplicación base o sus derivados.
+La empresa se reserva los derechos y obligaciones de cualquier cambio o modificación sin aviso previo, a los archivos
+scripts de acción/ejecución, configuración, de la aplicción base.
+
+Para contribuciones al código base, abocarse al archivo guía pertinente.
+
+## MIT licencia de copia.
+
+Copyright 2018-2023 Bytes4Run
+Por la presente se concede permiso, libre de cargos, a cualquier persona que obtenga una copia de este software y de los
+archivos de documentación asociados (el "Software"), a utilizar el Software sin restricción, incluyendo sin limitación
+los derechos a usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar, y/o vender copias del Software, y
+a permitir a las personas a las que se les proporcione el Software a hacer lo mismo, sujeto a las siguientes condiciones:
+El aviso de copyright anterior y este aviso de permiso se incluirán en todas las copias o partes sustanciales del Software.
+EL SOFTWARE SE PROPORCIONA "COMO ESTÁ", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A
+GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD PARA UN PROPÓSITO PARTICULAR E INCUMPLIMIENTO. EN NINGÚN CASO LOS AUTORES O
+PROPIETARIOS DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA
+EN UNA ACCIÓN DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O SU
+USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
+
+La infracción de los derechos de copia vertidos en cada módulo no incluido en lo anterior, podría incurrir en acciones
+legales castigadas según el código procesal penal del gobierno de El Salvador.
