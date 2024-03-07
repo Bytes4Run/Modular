@@ -13,7 +13,7 @@
 
 declare (strict_types = 1);
 
-namespace Kernel\helpers;
+namespace B4R\Kernel\helpers;
 
 class Messenger
 {

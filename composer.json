@@ -32,8 +32,8 @@
     "autoload": {
         "psr-4": {
             "B4R\\": "./app",
-            "Kernel\\": "./app/core",
-            "Modules\\": "./app/modules"
+            "B4R\\Kernel\\": "./app/core",
+            "B4R\\Modules\\": "./app/modules"
         }
     },
     "autoload-dev": {

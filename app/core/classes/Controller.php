@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Kernel\classes;
+namespace B4R\Kernel\classes;
 
 class Controller {
     private ?array $error;

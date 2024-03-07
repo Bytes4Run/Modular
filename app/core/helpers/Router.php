@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace B4R\core\helpers;
+namespace B4R\Kernel\helpers;
 
-use Kernel\handlers\Request;
-use Kernel\helpers\Config;
+use B4R\Kernel\handlers\Request;
+use B4R\Kernel\helpers\Config;
 
 class Router
 {

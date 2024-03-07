@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Cors 
+ * @description Clase que maneja las peticiones del usuario
+ * @category Handler
+ * @package app\core\handlers\Cors
+ * @version 1.0.0 
+ * @date 2024-01-10 
+ * @time 16:00:00
+ */
+
+declare(strict_types=1);
+
+namespace B4R\Kernel\handlers;
+
 class Cors {
     private $allowedOrigins;
 
@@ -33,8 +47,3 @@ class Cors {
         return in_array($origin, $this->allowedOrigins);
     }
 }
-
-// Usage example:
-$configFile = '/path/to/config.json'; // Replace with the actual path to your configuration file
-$cors = new Cors($configFile);
-$cors->handleCors();

@@ -13,10 +13,10 @@
 
 declare (strict_types = 1);
 
-namespace B4R\core\helpers;
+namespace B4R\Kernel\helpers;
 
-use Kernel\helpers\Config;
-use Kernel\libraries\ViewEngine;
+use B4R\Kernel\helpers\Config;
+use B4R\Kernel\libraries\ViewEngine;
 
 class ViewBuilder
 {

@@ -11,7 +11,7 @@
  */
     declare(strict_types=1);
 
-    namespace Kernel\handlers;
+    namespace B4R\Kernel\handlers;
     
 class Request {
     public static function getRemoteAddr() {
