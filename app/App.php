@@ -11,11 +11,12 @@
      */
 
     declare(strict_types=1);
+
     namespace B4R;
 
     # Helpers
-    use Kernel\helpers\Definer;
-    use Kernel\helpers\Router;
+    use B4R\Kernel\helpers\Definer;
+    use B4R\Kernel\helpers\Router;
     //use Kernel\helpers\Messenger;
     //use Kernel\helpers\ViewBuilder;
     # Handlers
@@ -121,11 +122,11 @@
             $count = count($callback);
             if ($count > 0) {
                 if ($count === 1) {
-                    $this->response = $this->getResponse($callback[0],params:$params);
+                    $this->response = $this->getModuleResponse($callback[0],params:$params);
                 } elseif ($count === 2) {
-                    $this->response = $this->getResponse($callback[0],$callback[1],params:$params);
+                    $this->response = $this->getModuleResponse($callback[0],$callback[1],params:$params);
                 } else {
-                    $this->response = $this->getResponse($callback[0],$callback[1],$callback[2],$params);
+                    $this->response = $this->getModuleResponse($callback[0],$callback[1],$callback[2],$params);
                 }
             } else {
                 $this->error = ["status"=>404,"message" => "No callback function found","data"=>[]];
