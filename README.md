@@ -3,14 +3,14 @@
 Modular (**Skeleton for a modular PHP web applications base on MVC pattern with Vite for auto web refresh, and 
 Tailwindcss for a modern design**)
 
-This framework is tailor over MVC pattern principals, in order to bring a efficient and easy to develop, modular 
-applications; the application contains embedded base modules to have an example to work with, classes to resolve 
-queries, build SQL queries, responses and views renderization, in order to have a modular web application, api rest, or
+This framework is tailor over MVC pattern principals, in order to bring a efficient, easy to develop and modular 
+applications; the framework application contains embedded base modules to have an example to work with, classes to resolve 
+queries, build SQL queries, responses and views renderization in order to have a modular web application, api rest, or
 service with a less programing code.
 
 To use this application, you need PHP, JavaScript or TypeScript, HTML, Object Oriented Programing, server configuration, 
-Git work flow basis (or higher) knowledge, download this repository, install all dependencies, configure the server to always resolve to 
-"public/index.php". 
+Git work flow basis (or higher) knowledge, download this repository, install all dependencies, configure the server to 
+always resolve to "public/index.php". 
 see apache .htaccess configuration for guidance. Also this application has a ".htaccess" file in it to make this easy.
 
 For more information visit [Bytes4Run.com](https://bytes4run.com/projects/modular).
@@ -37,10 +37,10 @@ For more information visit [Bytes4Run.com](https://bytes4run.com/projects/modula
 
 - PHP 8.1 or higher (8.1.7 recommended)
 - MariaDB 8 or higher, or MySQL in its defect
-- Had installed and activated this modules, php_curl, pdo, mod_rewrite
+- Had installed and activated this modules: php_curl, pdo, mod_rewrite
 - A compatible Composer with PHP 8 (to use PHP 7 to install, update the composer.json to make it so)
 - Node.js 18 or higher
-- Git
+- Git updated
 
 ## Getting the Project
 

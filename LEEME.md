@@ -1,18 +1,17 @@
 # Modular
 
-Modular (**Skeleton para una aplicación web PHP modular basado en patrón MVC con Vite para auto refresco, y
-Tailwindcss para un diseño moderno**)
+Modular (**Skeleton para aplicaciones web PHP modulares basado en patrón MVC con Vite para auto refresco, y Tailwindcss 
+para un diseño moderno**)
 
-Este framework está desarrollado sobre principios del patrón MVC, para un desarrollo eficiente y fácil, de
-aplicaciones modulares; la applicación contiene módulos base para tener un ejemplo de como trabajar, clases 
-para resolver consultas, constructor de consultas SQL, renderizado de vistas, para tener una aplicación we 
-modular, API Rest o servicio con poco programación de código.
+Este framework está desarrollado sobre principios del patrón MVC, para un desarrollo eficiente y fácil, de aplicaciones 
+modulares; la applicación framework contiene módulos base para tener un ejemplo de como trabajar él, clases para resolver 
+consultas, constructor de consultas SQL, renderizado de vistas para tener una aplicación web modular, API Rest o servicio 
+con poco programación de código.
 
-Para usar esta aplicación, necesitas tener conocimientos básicos (o altos) de PHP, JavaScript o TypeScript, 
-HTML, Programación Orientada a Objectos, configuración de servidores, flujo de trabajo Git, descargar este 
-repositorio, instalar todas sus dependencias, configurar el servidor para siempre resolver hacia "public/index.php".
-ver configuración .htaccess para apache para tener una guía. Así mismo ésta aplicación tiene un archivo 
-".htaccess" dentro para hacerlo más fácil.
+Para usar esta aplicación, necesitas tener conocimientos básicos (o altos) de PHP, JavaScript o TypeScript, HTML, 
+Programación Orientada a Objectos, configuración de servidores, flujo de trabajo Git, descargar este repositorio, instalar 
+todas sus dependencias, configurar el servidor para siempre resolver hacia "public/index.php". ver configuración .htaccess 
+para apache para tener una guía. Así mismo ésta aplicación tiene un archivo ".htaccess" dentro para hacerlo más fácil.
 
 Para más información visita [Bytes4Run.com](https://bytes4run.com/projects/modular).
 
@@ -25,12 +24,12 @@ Para más información visita [Bytes4Run.com](https://bytes4run.com/projects/mod
   - [Configurando el Proyecto](#configurando-el-proyecto)
   - [Tecnologías](#tecnologías)
   - [Tema y diseño](#tema-y-diseño)
-  - [Data and Directory Structure](#data-and-directory-structure)
+  - [Estructura de Datos y Directorios](#estructura-de-datos-y-directorios)
     - [Map](#map)
     - [Petición al Servidor](#petición-al-servidor)
     - [Respuesta del Servidor](#respuesta-del-servidor)
       - [Tipos de Respuesta](#tipos-de-respuesta)
-      - [View Data Structure Example](#view-data-structure-example)
+      - [Ejemplo de estructura de Datos para Vistas](#ejemplo-de-estructura-de-datos-para-vistas)
   - [Créditos](#créditos)
   - [FQA](#fqa)
   - [Código Abierto y Contribución](#código-abierto-y-contribución)
@@ -54,11 +53,11 @@ petición hacia "public/index.php"
 
 ## Configurando el Proyecto
 
-Asegurece de tener un archivo .env en su carpeta "_configs/_"; si no tiene uno, copie el archivo "_.env.example_" 
-y renombrelo como ".env". Así mismo hacer con el archivo "_config.json.example_".
+Asegurece de tener un archivo .env en su carpeta "_configs/_"; si no tiene uno, copie el archivo "_.env.example_" y 
+renombrelo como ".env". Así mismo hacer con el archivo "_config.json.example_".
 
-Agregue su configuración de database al archivo "_.env_", su configuración de aplicación and compañia al 
-archivo "config.json" y todo está listo.
+Agregue su configuración de database al archivo "_.env_", su configuración de aplicación and compañia al archivo 
+"config.json" y todo está listo.
 
 ## Tecnologías
 
@@ -72,7 +71,7 @@ archivo "config.json" y todo está listo.
 - **[Tailwindcss](https://tailwindcss.com/)**
 - **[Flowbite](https://flowbite.com/)**
 
-## Data and Directory Structure
+## Estructura de Datos y Directorios
 
 ### Map
 
@@ -158,11 +157,11 @@ URL:
 
 URL Format:
 
-- module/ (Cuando el controlador tiene el mismo nombre del módulo, esto resuelve: _método read en un controlador 
+- module/ (Cuando el controlador tiene el mismo nombre del módulo, esto resuelve: _método "read" en un controlador 
   con el mismo nombre del módulo_)
 - module/method/ (Cuando se conoce el nombre del método, y el controlador tiene el mismo nombre que el módulo 
   esto resuelve: _un método en un controlador con el mismo nombre del módulo_)
-- module/method?param1&param2 (Cuando se conocen los parámetros, el nombre del método, y el controlador tiene 
+- module/method?param1&param2 (Cuando se conocen los parámetros, el nombre del método y el controlador tiene 
   el mismo nombre que el módulo, esto resuelve: _parámetros para un método en un controlador con el mismo nombre 
   del módulo_)
 - module/controller/method/param1/param2 (Cuando se pasan todos los parámetros como una URI, esto resuelve: _parámetros 
@@ -172,18 +171,18 @@ URL Format:
 
 ### Respuesta del Servidor
 
-La respuesta del servidor será una vista renderizada por el motor de plantillas configurado en el archivo .env (Smarty, twig, self)
-o una cadena en formato JSON para ser consumida por un framework frontend como vue, react, astro, etc.
+La respuesta del servidor será una vista renderizada por el motor de plantillas configurado en el archivo .env (Smarty, 
+twig, self) o una cadena en formato JSON para ser consumida por un framework frontend como vue, react, astro, etc.
 
 La respuesta será siempre en este formato `php ['view'=>"",'content'=[]]`; para el consumo con motores,
 `json {status:200,message:"ok",data:[]}`; para el consumo frontend.
 
 #### Tipos de Respuesta
 
-Toda respuesta tiene un formato "header", "body","footer", esta puede ser un texto plano, an array with additional information,
-according with the controller response.
+Toda respuesta tiene un formato "header", "body","footer", esta puede ser un texto plano, un arreglo con información 
+adicional, dependiendo de la respuesta del controlador.
 
-If the response is a message, the schema could be:
+Sí la respuesta es un mensaje, sú esquema será:
 
 ```php
 $response = [
@@ -219,7 +218,7 @@ $response = [
 ];
 ```
 
-If message is a band to be displayed, the schema could be:
+Sí sú mensaje es mostrado en una banda, el esquema será:
 
 ```php
 $response = [
@@ -246,15 +245,15 @@ $response = [
 ];
 ```
 
-All views have a general information for the main layout, this consist in "head","css","js","icons","navbar","sidebar",
-"footer","app configs" if you want to use a different one you can make your own structure inside the module as a helper to
-be call any time a view is has to be render.
+Toda vista tiene la información general de la "layout" principal a ser usada, esto consiste en "head","css","js","icons",
+"navbar","sidebar","footer","app configs" si se desea usar una diferente, puede hacer su estructura dentro de un helper y
+llamarle antes de responder al creador de vistas.
 
-#### View Data Structure Example
+#### Ejemplo de estructura de Datos para Vistas
 
 ```php
 $response = [
-    'content' => [], //where the content for the body will be
+    'content' => [], // Donde el contenido será el cuerpo de la vista
     'layout' => [
         'head' => [
             'template' => "template_name.tpl",
@@ -277,7 +276,7 @@ $response = [
             'data' => []
         ],
         'jslibs'=>['<script type="" src=""></script>',...]
-        'scripts' => '<script></script>' // An script to be use at the beginning of the DOM
+        'scripts' => '<script></script>' // Un script para ser usado en el inicio del DOM
     ]
 ];
 ```
@@ -295,9 +294,9 @@ $response = [
 
 ## Código Abierto y Contribución
 
-Este "framework" or "skeleton" is Open Source, licensed under the Bytes4Run free licence base on MIT licence.
+Este "framework" o "skeleton" es de Código Abierto, licensiado bajo la licencia de uso libre de Bytes4Run basada en la 
+licencia de uso de MIT (Massachusetts Institute Technology).
 
-If you would like to contribute to the materials, please feel free to fork the repository and send us a pull request. Or
-if you have a comment, question, or suggestion for improvements over this or other Bytes4Run projects, please
-[raise an issue](https://github.com/bytes4run/modular/issues); or writes us to
-[projects@bytes4run.com](mailto:projects@bytes4run.com)
+Sí desea contribuir, sientase libre de realizar una bifurcación al repositorio y enviar una petición de "pull". O puede 
+dejar un comentario, inquietud o sugerencia para mejoras sobre este u otro proyecto de Bytes4Run, [raise an issue](https://github.com/bytes4run/modular/issues);
+o escríbanos a [projects@bytes4run.com](mailto:projects@bytes4run.com)
