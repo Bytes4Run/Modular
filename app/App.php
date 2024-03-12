@@ -86,6 +86,7 @@
             //$this->messenger = new Messenger;
             $this->error = null;
             $this->response = null;
+            $this->params = [];
             $this->init();
         }
 
@@ -94,9 +95,9 @@
          * @return void
          */
         public function  init() :void {
-            //$this->params   = $this->routes->_get("params");
-            //$this->method   = $this->routes->getMethod();
-            //$this->callback = $this->routes->_get("callback");
+            $this->params   = $this->routes->getParams();
+            $this->method   = $this->routes->getMethod();
+            $this->callback = $this->routes->getCallback();
             $this->run();
         }
 
@@ -189,21 +190,24 @@
          * @param string|null $controller Controller Name
          * @param string|null $method Method Name
          * @param array $params Parameter to pass
-         * @return array
+         * @return array|null
          */
-        private function getModuleResponse(string $module, string $controller = null, string $method = null, array $params = []) :array {
+        private function getModuleResponse(string $module, string $controller = null, string $method = null, array $params = []) :array|null {
             $component = $this->getComponent($module,$controller);
             if ($component instanceof \Throwable) {
-                return ["status"=>$component->getCode(),"message" => $component->getMessage(), "data"=>[]];
+                $this->error = ["status"=>$component->getCode(),"message" => $component->getMessage(), "data"=>[]];
+                return null;
             }
             if (method_exists($component,$method)) {
                 try {
                     return call_user_func_array($component::$method,$params);
                 } catch (\Throwable $th) {
-                    return ["status"=>$th->getCode(),"message" => $th->getMessage(), "data"=>[]];
+                    $this->error = ["status"=>$th->getCode(),"message" => $th->getMessage(), "data"=>[]];
+                    return null;
                 }
             } else {
-                return ["status"=>404,"message" => "Method not found", "data"=>[]];
+                $this->error = ["status"=>404,"message" => "Method not found", "data"=>[]];
+                return null;
             }
         }
 
@@ -215,19 +219,22 @@
          */
         private function getComponent(string $module, string $controller = null): object{
             $module = ucwords($module);
-            $component = "Modules\\".$module;
+            $component = "B4R\\Modules\\".$module;
             $component .= $module . "\\Controllers\\";
             $component .= ($controller === null) ? $module : ucwords($controller);
             $component .= "Controller";
-            if (class_exists($component)) {
-                try {
-                    return new $component;
-                } catch (\Throwable $th) {
-                    return $th;
+            try {
+                if (class_exists($component)) {
+                    try {
+                        return new $component;
+                    } catch (\Throwable $th) {
+                        return $th;
+                    }
+                } else {
+                    throw new \Error("Component not found");
                 }
-            } else {
-                $error = throw new \Error("Component not found");
-                return $error;
+            } catch (\Throwable $th) {
+                return $th;
             }
         }
     }
