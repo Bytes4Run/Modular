@@ -1,0 +1,1 @@
+{{extends file=_VIEW_|cat:$theme|cat:"root.tpl"}}

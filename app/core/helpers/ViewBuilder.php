@@ -98,11 +98,11 @@ class ViewBuilder
     private function find(string | array $view): bool
     {
         if (is_array($view)) {
+            if ($view['type'] !== "json") {
+                $this->path = $this->getViewPath($view);
+                return file_exists($this->path);
+            }
             $view = ['type' => "template", 'name' => $view];
-        }
-        if ($view['type'] !== "json") {
-            $this->path = $this->getViewPath($view);
-            return file_exists($this->path);
         }
         return false;
     }

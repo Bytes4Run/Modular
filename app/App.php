@@ -17,8 +17,8 @@
     # Helpers
     use B4R\Kernel\helpers\Definer;
     use B4R\Kernel\helpers\Router;
-    //use Kernel\helpers\Messenger;
-    //use Kernel\helpers\ViewBuilder;
+    use B4R\Kernel\helpers\Messenger;
+    use B4R\Kernel\helpers\ViewBuilder;
     # Handlers
     //use Kernel\handlers\Authorization;
     class App {
@@ -62,13 +62,13 @@
          * @var Messenger
          * @description Messenger Helper Object
          */
-        //private Messenger $messenger;
+        private Messenger $messenger;
 
         /**
          * @var ViewBuilder
          * @description View builder for any engine to be use
          */
-        //private ViewBuilder $view;
+        private ViewBuilder $view;
 
         /**
          * @var Authorization
@@ -83,7 +83,7 @@
         {
             new Definer;
             $this->routes = new Router;
-            //$this->messenger = new Messenger;
+            $this->messenger = new Messenger;
             $this->error = null;
             $this->response = null;
             $this->params = [];
@@ -140,9 +140,15 @@
          */
         public function render(array $response) :void {
             if (is_array($response)) {
-                echo json_encode($response);
+                if (isset($response['view'])) {
+                    $this->view->render($response['view'],$response['data'] ?? []);
+                } else {
+                    $message = $this->messenger->json($response);
+                    $this->view->render($message['view'],$message['data']);
+                }
             } else {
-                echo $response;
+                $message = $this->messenger->message($response);
+                $this->view->render($message['view'],$message['data']);
             }
         }
 
