@@ -31,6 +31,17 @@ class Messenger
             default => $this->buildAMessage($data),
         };
     }
+    public function json(array $data):array
+    {
+        if ($data['status'] === 200) {
+            $type = "success";
+        };
+        return $this->build($type, $data);
+    }
+    public function message (string $type = 'info', string | array $data = '')
+    {
+        return $this->build($type, $data);
+    }
     private function buildInfoMessage(string | array $data)
     {
         return $this->buildAMessage([

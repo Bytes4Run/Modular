@@ -285,9 +285,9 @@ $response = [
 ## FQA
 
 ## Open Source and Contribution
-This "framework" or "skeleton" is Open Source, licensed under the Bytes4Run free licence base on MIT licence. 
+
+This "framework" or "skeleton" is Open Source, licensed under the Bytes4Run free licence base on MIT licence.
 
 If you would like to contribute to the materials, please feel free to fork the repository and send us a pull request. Or
-if you have a comment, question, or suggestion for improvements over this or other Bytes4Run projects, please 
-[raise an issue](https://github.com/bytes4run/modular/issues); or writes us to 
-[projects@bytes4run.com](mailto:projects@bytes4run.com)
+if you have a comment, question, or suggestion for improvements over this or other Bytes4Run projects, please feel free
+[raise an issue](https://github.com/bytes4run/modular/issues); or writes us to [projects@bytes4run.com](mailto:projects@bytes4run.com)
