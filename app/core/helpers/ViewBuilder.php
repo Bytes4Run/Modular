@@ -66,8 +66,8 @@ class ViewBuilder
 
     /**
      * Function to render the view
-     * @param string $view
-     * @param array $data
+     * @param string|array $view
+     * @param array|null $data
      * @return void
      */
     public function render(string | array $view, array $data = []): void
