@@ -158,12 +158,12 @@
          */
         public function end () :void {
             echo "Finish application execution";
-            //if (isset($this->messenger)) {
-            //    unset($this->messenger);
-            //}
-            //if (isset($this->routes)) {
-            //    unset($this->routes);
-            //}
+            if (isset($this->messenger)) {
+                unset($this->messenger);
+            }
+            if (isset($this->routes)) {
+                unset($this->routes);
+            }
             if (isset($this->error)) {
                 unset($this->error);
             }
