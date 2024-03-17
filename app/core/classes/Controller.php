@@ -177,4 +177,62 @@ class Controller {
             'routes' => $routes,
         ];
     }
+    /**
+     * Function to generate a error message
+     * @param string|int $type
+     * @param mixed $content
+     * @param string $display
+     * @return array
+     */
+    public function error(string | int $type, mixed $content, string $display = "alert"): array {
+        if (is_string($type)) {
+            $type = match ($type) {
+                "info" => 200,
+                "error" => 500,
+                "success" => 200,
+                "warning" => 200,
+                default => 200,
+            };
+        }
+        if (is_array($content)) {
+            $message = $content['message'];
+            $code = $content['code'];
+        } elseif (is_string($content)) {
+            $message = $content;
+            $code = $type;
+        } elseif ($content instanceof \Exception) {
+            $message = $content->getMessage();
+            $code = $content->getCode();
+        }
+        if ($display == "view" || $display == "template") {
+            return [
+                'view' => [
+                    'type' => $display,
+                    'name' => $code,
+                    'data' => [
+                        'code' => $code,
+                        'style' => [
+                            'title' => "Error " . $code,
+                            'color' => "danger",
+                        ],
+                    ],
+                ],
+                'data' => [
+                    'message' => $message,
+                ],
+            ];
+        } else {
+            return [
+                'view' => [
+                    'type' => 'json',
+                    'name' => "error",
+                ],
+                'data' => [
+                    'message' => $message,
+                    'code' => $code,
+                    'type' => $type,
+                ],
+            ];
+        }
+    }
 }
