@@ -225,7 +225,7 @@
          */
         private function getComponent(string $module, string $controller = null): object{
             $module = ucwords($module);
-            $component = "B4R\\Modules\\".$module;
+            $component = "B4R\\Modules\\";
             $component .= $module . "\\Controllers\\";
             $component .= ($controller === null) ? $module : ucwords($controller);
             $component .= "Controller";
