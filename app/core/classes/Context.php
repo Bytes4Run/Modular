@@ -16,7 +16,7 @@ declare(strict_types=1);
 namespace B4R\Kernel\classes;
 
 use B4R\Kernel\classes\Connection;
-use DeepCopy\Exception\PropertyException;
+use Exception;
 
 class Context {
     private ?string $base_name;

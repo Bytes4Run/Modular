@@ -56,9 +56,9 @@ class ViewBuilder
     {
         $conf = new Config();
         $this->vars = $conf->get('config', 'json');
-        $this->theme = $this->vars['APP_VIEW']['engine'] . "/" . $this->vars['APP_VIEW']['theme'];
-        if ($this->vars['APP_VIEW']['engine'] !== 'json') {
-            $this->engine = new ViewEngine($this->vars['APP_VIEW']['engine']);
+        $this->theme = $this->vars['app_view']['engine'] . "/" . $this->vars['app_view']['theme'];
+        if ($this->vars['app_view']['engine'] !== 'json') {
+            $this->engine = new ViewEngine($this->vars['app_view']['engine']);
         } else {
             $this->engine = 'json';
         }
@@ -70,7 +70,7 @@ class ViewBuilder
      * @param array|null $data
      * @return void
      */
-    public function render(string | array $view, array $data = []): void
+    public function render(string|array $view, array $data = []): void
     {
         $this->token = $_SESSION['token'] ?? '';
         if ($this->engine !== "json") {
@@ -95,7 +95,7 @@ class ViewBuilder
      * @param string|array $view
      * @return bool
      */
-    private function find(string | array $view): bool
+    private function find(string|array $view): bool
     {
         if (is_array($view)) {
             if ($view['type'] !== "json") {
@@ -114,6 +114,7 @@ class ViewBuilder
      */
     private function createData(array $data): array
     {
+        $userData = [];
         if (!empty($data['view'])) {
             $title = str_replace("/", " | ", $data['view']);
         }
@@ -139,7 +140,7 @@ class ViewBuilder
                 'navbar' => [
                     'template' => "_shared/templates/_navbar.tpl",
                     'data' => [
-                        'app_logo' => ($userData['mode'] == "dark") ? $this->vars['darkLogo'] : $this->vars['app_logo'],
+                        'app_logo' => (isset($userData['mode']) && $userData['mode'] == "dark") ? $this->vars['darkLogo'] : $this->vars['app_logo'],
                         'user' => $userData
                     ],
                 ],
@@ -159,40 +160,40 @@ class ViewBuilder
     private function getViewPath(array $view): string
     {
         $path = _VIEW_ . $this->theme . "/";
-        $path .= match ($view['type']) {
-            "template" => function ($view) {
+        switch ($view['type']) {
+            case "template":
                 $name = explode('/', $view['name']);
                 if (count($name) > 2) {
                     $app = $name[0];
                     $module = $name[1];
                     $viewName = $name[2];
-                    return $app . "/" . $module . "/templates/" . $viewName . ".tpl";
+                    $path .= $app . "/" . $module . "/templates/" . $viewName . ".tpl";
                 } elseif (count($name) == 2) {
                     $module = $name[0];
                     $viewName = $name[1];
-                    return $module . "/templates/" . $viewName . ".tpl";
+                    $path .= $module . "/templates/" . $viewName . ".tpl";
                 } else {
-                    return "default/templates/" . $name[0] . ".tpl";
+                    $path .= "default/templates/" . $name[0] . ".tpl";
                 }
-            },
-            "layout" => function ($view) {
+                break;
+            case "layout":
                 $name = explode('/', $view['name']);
                 if (count($name) > 2) {
                     $app = $name[0];
                     $module = $name[1];
                     $viewName = $name[2];
-                    return $app . "/" . $module . "/layouts/" . $viewName . ".tpl";
+                    $path .= $app . "/" . $module . "/layouts/" . $viewName . ".tpl";
                 } elseif (count($name) == 2) {
                     $module = $name[0];
                     $viewName = $name[1];
-                    return $module . "/layouts/" . $viewName . ".tpl";
+                    $path .= $module . "/layouts/" . $viewName . ".tpl";
                 } else {
-                    return "default/layouts/" . $name[0] . ".tpl";
+                    $path .= "default/layouts/" . $name[0] . ".tpl";
                 }
-
-            },
-            default => $view['name'] . ".tpl",
-        };
+                break;
+            default: $view['name'] . ".tpl";
+                break;
+        }
         return $path;
     }
 
@@ -227,7 +228,7 @@ class ViewBuilder
      * @param string $type
      * @return void
      */
-    private function buildDefaultView(string | array $view, array $data, string $type): void {
+    private function buildDefaultView(string|array $view, array $data, string $type): void {
         $this->path = _VIEW_ . $this->theme . "/default/" . $type . ".tpl";
         $viewData = [
             'content' => $data,
