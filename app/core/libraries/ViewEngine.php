@@ -57,17 +57,23 @@ class ViewEngine
      * @return void|\Exception
      */
     public function render(string $view): void {
+        $renderized = '';
         switch ($this->engine) {
             case 'smarty':
-                $this->engineClass->display($view);
+                $renderized = $this->engineClass->fetch($view);
                 break;
             case 'twig':
-                echo $this->engineClass->render($view);
+                $renderized = $this->engineClass->render($view);
                 break;
             default:
-                throw new \Exception("Engine not supported");
+            $renderized = json_encode(['message'=>"Engine not supported", 'status'=>500]);
                 break;
         }
+        echo $renderized;
+        /* echo "<pre>";
+        var_dump($this->engine);
+        echo "</pre>";
+        exit; */
     }
 
     /**
@@ -84,9 +90,9 @@ class ViewEngine
             case 'smarty':
                 $this->initSmarty($this->literal, $this->caching);
                 break;
-            case 'twig':
+            /* case 'twig':
                 $this->initTwig($this->literal, $this->caching);
-                break;
+                break; */
             case 'json':
                 break;
             default:
@@ -121,12 +127,12 @@ class ViewEngine
      * @param bool $caching
      * @return void
      */
-    private function initTwig(array $literal, bool $caching): void
+    /* private function initTwig(array $literal, bool $caching): void
     {
         $loader = new \Twig\Loader\FilesystemLoader(_VIEW_);
         $this->engineClass = new \Twig\Environment($loader, [
             'cache' => _CACHE_ . 'twig',
             'auto_reload' => true,
         ]);
-    }
+    } */
 }
