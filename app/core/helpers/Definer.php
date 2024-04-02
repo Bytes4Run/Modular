@@ -9,7 +9,7 @@
      */
     declare(strict_types=1);
 
-    namespace B4R\Kernel\helpers;
+    namespace Kernel\helpers;
     class Definer {
         public function __construct()
         {

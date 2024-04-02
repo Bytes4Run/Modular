@@ -5,7 +5,7 @@
  * @description This class is the base class for all database connections
  * @author Jorge Echeverria <jecheverria@bytes4run.com> 
  * @category Class 
- * @package B4R\Kernel\classes\Connection
+ * @package Kernel\classes\Connection
  * @version 1.7.0 
  * @date 2023-01-10 - 2024-03-11
  * @time 15:00:00
@@ -14,11 +14,11 @@
 
 declare(strict_types=1);
 
-namespace B4R\Kernel\classes;
+namespace Kernel\classes;
 
 use PDO;
 use PDOException;
-use B4R\Kernel\helpers\Config;
+use Kernel\helpers\Config;
 
  class Connection {
     /**

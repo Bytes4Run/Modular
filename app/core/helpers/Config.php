@@ -5,13 +5,13 @@
      * @description Helper to get and set configuration variables
      * @category Helper
      * @author JEcheverria <jecheverria@bytes4run.com>
-     * @package app\core\helpers\Config
+     * @package Kernel\helpers\Config
      * @version 1.3.0 rev. 1
      * 10-01-2023/03-05-2023
      */
     declare(strict_types=1);
 
-    namespace B4R\Kernel\helpers;
+    namespace Kernel\helpers;
 
     use Dotenv\Dotenv;
     use Exception;

@@ -4,7 +4,7 @@
  * @description This class is the base class for all models
  * @author Jorge Echeverria <jecheverria@bytes4run.com> 
  * @category Class 
- * @package B4R\Kernel\classes\Context
+ * @package Kernel\classes\Context
  * @version 1.3.0 rev.1 
  * @date 2023-05-01 - 2024-03-06
  * @time 17:50:00
@@ -13,9 +13,9 @@
  
 declare(strict_types=1);
 
-namespace B4R\Kernel\classes;
+namespace Kernel\classes;
 
-use B4R\Kernel\classes\Connection;
+use Kernel\classes\Connection;
 use Exception;
 
 class Context {

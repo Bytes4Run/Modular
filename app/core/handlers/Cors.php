@@ -4,7 +4,7 @@
  * Cors 
  * @description Clase que maneja las peticiones del usuario
  * @category Handler
- * @package app\core\handlers\Cors
+ * @package Kernel\handlers\Cors
  * @version 1.0.0 
  * @date 2024-01-10 
  * @time 16:00:00
@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace B4R\Kernel\handlers;
+namespace Kernel\handlers;
 
 class Cors {
     private $allowedOrigins;

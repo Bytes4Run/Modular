@@ -3,7 +3,7 @@
  * @description Home controller
  * @category Loader
  * @author Jorge Echeverria <jecheverria@bytes4run.com>
- * @package B4R\Modules\Home\controllers
+ * @package Modules\Home\controllers
  * @license Bytes4Run
  * @version 1.0.0
  * @link https://bytes4run.com/
@@ -12,9 +12,9 @@
 
 declare (strict_types = 1);
 
-namespace B4R\Modules\Home\controllers;
+namespace Modules\Home\controllers;
 
-use B4R\Kernel\classes\Controller;
+use Kernel\classes\Controller;
 
 class HomeController extends Controller
 {

@@ -5,17 +5,17 @@
  * @description Helper to resolve the provided route
  * @category Helper
  * @author JEcheverria <jecheverria@piensads.com>
- * @package app\core\helpers\Router
+ * @package Kernel\helpers\Router
  * @version 1.0.0 rev. 1
  * @Time: 2021-04-27 19:00:00
  */
 
 declare(strict_types=1);
 
-namespace B4R\Kernel\helpers;
+namespace Kernel\helpers;
 
-use B4R\Kernel\handlers\Request;
-use B4R\Kernel\helpers\Config;
+use Kernel\handlers\Request;
+use Kernel\helpers\Config;
 
 class Router
 {

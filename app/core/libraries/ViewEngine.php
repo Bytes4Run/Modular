@@ -13,7 +13,7 @@
 
 declare (strict_types = 1);
 
-namespace B4R\Kernel\libraries;
+namespace Kernel\libraries;
 
 class ViewEngine
 {

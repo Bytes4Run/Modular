@@ -4,7 +4,7 @@
  * @description This class is used to build the views of the application
  * @category Helper
  * @author Jorge Echeverria <jecheverria@bytes4run.com>
- * @package B4R\core\helpers\ViewBuilder
+ * @package Kernel\helpers\ViewBuilder
  * @version 1.0.0
  * @date 2024-03-06
  * @time 11:00:00
@@ -13,10 +13,10 @@
 
 declare (strict_types = 1);
 
-namespace B4R\Kernel\helpers;
+namespace Kernel\helpers;
 
-use B4R\Kernel\helpers\Config;
-use B4R\Kernel\libraries\ViewEngine;
+use Kernel\helpers\Config;
+use Kernel\libraries\ViewEngine;
 
 class ViewBuilder
 {
