@@ -4,6 +4,7 @@ Como se ha visto en muchos proyectos, el código no siempre es limpio o listo pa
 Por ello, se declaran las siguientes reglas para la creación de archivos como clases, controles, ayudantes, manejadores, clases de librerías, entidades, modelos entre otros archivos a ser usados en la aplicación.
 
 ## Reglas de estandarización
+
 Se estandariza el uso de las recomendaciones PSR para la creación de archivos que contendrán clases o funciones (métodos) a ser usados por la aplicación. Siguiendo las normas PSR.
 
 La denominación de los controladores será en “camel-case” siguiendo la norma PSR-4 para crear espacios de nombre, en plural, en inglés, dicho nombre deberá terminar con la palabra “Controller” para denotar su uso como controlador.

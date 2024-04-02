@@ -3,7 +3,7 @@
      * @description Application loader
      * @category Loader
      * @author Jorge Echeverria <jecheverria@bytes4run.com>
-     * @package B4R\App
+     * @package APP\App
      * @license Bytes4Run
      * @version 1.0.0
      * @link https://bytes4run.com
@@ -12,13 +12,13 @@
 
     declare(strict_types=1);
 
-    namespace B4R;
+    namespace APP;
 
     # Helpers
-    use B4R\Kernel\helpers\Definer;
-    use B4R\Kernel\helpers\Router;
-    use B4R\Kernel\helpers\Messenger;
-    use B4R\Kernel\helpers\ViewBuilder;
+    use Kernel\helpers\Definer;
+    use Kernel\helpers\Router;
+    use Kernel\helpers\Messenger;
+    use Kernel\helpers\ViewBuilder;
     # Handlers
     //use Kernel\handlers\Authorization;
     class App {
@@ -82,32 +82,26 @@
         public function __construct()
         {
             new Definer;
-            $this->routes = new Router;
+            $this->view      = new ViewBuilder;
+            $this->error     = null;
+            $this->routes    = new Router;
+            $this->response  = null;
             $this->messenger = new Messenger;
-            $this->error = null;
-            $this->response = null;
-            $this->params = [];
-            $this->init();
-        }
-
-        /**
-         * @description Method to set the routes
-         * @return void
-         */
-        public function  init() :void {
+            /**
+             * Obtaining Route component data
+             */
             $this->params   = $this->routes->getParams();
             $this->method   = $this->routes->getMethod();
             $this->callback = $this->routes->getCallback();
-            $this->run();
         }
 
         /**
          * @description Method to run the application
          * @return array $callback 
          * @return array $params
-         * @return void
+         * @return bool
          */
-        public function run(array $callback = [], array $params = []) :void {
+        public function run(array $callback = [], array $params = []) :bool {
             if (empty($callback)) {
                 if (!empty($this->routes)) {
                     $params   = $this->params;
@@ -123,15 +117,17 @@
             $count = count($callback);
             if ($count > 0) {
                 if ($count === 1) {
-                    $this->response = $this->getModuleResponse($callback[0],params:$params);
+                    $this->response = $this->getModuleResponse($callback[0],$callback[0],$callback[0],$params);
                 } elseif ($count === 2) {
-                    $this->response = $this->getModuleResponse($callback[0],$callback[1],params:$params);
+                    $this->response = $this->getModuleResponse($callback[0],$callback[0],$callback[1],params:$params);
                 } else {
                     $this->response = $this->getModuleResponse($callback[0],$callback[1],$callback[2],$params);
                 }
             } else {
                 $this->error = ["status"=>404,"message" => "No callback function found","data"=>[]];
+                return false;
             }
+            return true;
         }
 
         /**
@@ -157,7 +153,6 @@
          * @return void
          */
         public function end () :void {
-            echo "Finish application execution";
             if (isset($this->messenger)) {
                 unset($this->messenger);
             }
@@ -178,7 +173,7 @@
         /**
          * @description Method to get the error
          */
-        public function getError() :array {
+        public function getError() :array|null {
             return $this->error;
         }
 
@@ -206,7 +201,9 @@
             }
             if (method_exists($component,$method)) {
                 try {
-                    return call_user_func_array($component::$method,$params);
+                    $componentInitialized = array($component,$method);
+                    $params = array($params);
+                    return call_user_func_array($componentInitialized,$params);
                 } catch (\Throwable $th) {
                     $this->error = ["status"=>$th->getCode(),"message" => $th->getMessage(), "data"=>[]];
                     return null;
@@ -225,7 +222,7 @@
          */
         private function getComponent(string $module, string $controller = null): object{
             $module = ucwords($module);
-            $component = "B4R\\Modules\\";
+            $component = "Modules\\";
             $component .= $module . "\\Controllers\\";
             $component .= ($controller === null) ? $module : ucwords($controller);
             $component .= "Controller";
