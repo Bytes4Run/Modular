@@ -13,7 +13,7 @@
     "app_language":"es",
     "app_logo":"app_logo.png",
     "app_logo_mini":"app_logo_mini.png",
-    "app_tile_color":"#FFFFFF",
+    "app_title_color":"#FFFFFF",
     "app_theme_color":"#FFFFFF",
     "app_background_color":"#333333",
     "app_view":{

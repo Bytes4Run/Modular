@@ -11,3 +11,4 @@ node_modules/
 *.sql
 .phpunit.result.cache
 *.code-workspace
+.env
