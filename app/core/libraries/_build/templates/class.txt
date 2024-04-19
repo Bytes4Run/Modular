@@ -1,0 +1,21 @@
+<?php
+/** 
+ * {name}
+ * @description {name} class for manage {name}
+ * @author Jorge Echeverria <jecheverria@bytes4run.com>
+ * @category Model
+ * @package Modules\{name}\{type}s\{name}
+ * @version 1.0.0
+ * @date {date}
+ * @time {now}
+ */
+declare(strict_types=1);
+namespace Modules\{name}\{type}s;
+# Base;
+use Exception;
+use Throwable;
+# Classes;
+use Kernel\classes\{class};
+class {name} extends {class} {
+    {content}
+}
