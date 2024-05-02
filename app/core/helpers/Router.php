@@ -78,7 +78,10 @@ class Router
         $method = $this->getMethod();
         $this->http_method = $method;
         if (!empty($path[0])) {
-            $this->callback = explode('/', $path[0]);
+            $this->callback = $path;
+            if (preg_match('/\//',$path[0])) {
+                $this->callback = explode('/', $path[0]);
+            }
             if (empty($this->callback[0])) {
                 array_shift($this->callback);
             }
@@ -208,7 +211,6 @@ class Router
             "delete" => "delete",
             default => "index"
         };
-        $defaults = array();
         if (empty($callback)) {
             if (empty($_ENV)) {
                 $configs = new Config;
@@ -241,14 +243,14 @@ class Router
         $nameSplited = explode('.', $asset);
         $extension = end($nameSplited);
         $mime = match ($extension) {
-            "css" => "text/css",
-            "js" => "text/javascript",
-            "png" => "image/png",
-            "jpg" => "image/jpeg",
-            "jpeg" => "image/jpeg",
-            "gif" => "image/gif",
-            "svg" => "image/svg+xml",
-            "ico" => "image/x-icon",
+            "js"    => "text/javascript",
+            "css"   => "text/css",
+            "png"   => "image/png",
+            "jpg"   => "image/jpeg",
+            "gif"   => "image/gif",
+            "svg"   => "image/svg+xml",
+            "ico"   => "image/x-icon",
+            "jpeg"  => "image/jpeg",
             default => "text/plain"
         };
         return $mime;
