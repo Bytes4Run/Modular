@@ -16,7 +16,7 @@ public function __construct(int $id = null) {
  * @param string $prop
  * @param return mixed
  */
- public function __get(string $name):mixed {
+public function __get(string $name):mixed {
     $result = null;
     if (property_exists($this, $name)) {
         if (in_array($name, ['id'])) {
@@ -57,9 +57,9 @@ public function __set(string $name, $value): void {
  */
 private function __setError(array $error): void {
     if (!is_null($this->error) && !empty($this->error)) {
-        self::$error = $error;
+        $this->error[] = $error;
     } else {
-        self::$error = $error;
+        $this->error = $error;
     }
 }
 /** 
