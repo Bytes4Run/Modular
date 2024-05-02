@@ -25,6 +25,11 @@ class Context {
     private string|array $fields;
     private string|array $conditions;
     private string $query;
+    private ?string $order;
+    private ?string $orderby;
+    private ?string $groupby;
+    private ?string $oparator;
+    private ?string $separator;
     /**
      * Function constructor
      * @param string $base_name Base name of the model
@@ -49,9 +54,9 @@ class Context {
      * Function to get the error
      * @return array|null
      */
-    public function getError(): ?array
+    public static function _getError(): ?array
     {
-        return $this->error;
+        return Self::$error;
     }
     /**
      * Function to get data from the database using the parameters given by the user
@@ -60,19 +65,26 @@ class Context {
      * Structure:
      * 
      * $query = [
-     *    "fields" => ["table"=>["field1","field2","field3"]],
-     *    "joins" => ["type" => ['table1'=>"field",'table2 => "field"],...],
-     *    "conditions" => [["type" => ['field1', 'value1']],['type2' => ["field2",'value2']],...,"separator" => "AND"],
+     *      "fields" => [
+     *          "table"=>["field1","field2","field3"]
+     *      ],
+     *      "joins" => [
+     *          "type" => ['table1'=>"field",'table2 => "field"],...
+     *      ],
+     *      "condition" => [
+     *          ["type" => ['field1', 'value1']],
+     *          ['type2' => ["field2",'value2']],...,
+     *      "separator" => ["AND"],
      * ];
      * 
      * Where: 
      * 
-     * "fields": Is an array of tables and fields to get, where the table is the key of an array of fields, This can be a table name as a key for a string of fields separated by commas
-     * "joins": Is an array of tables and fields to join, hwere the key is the type of join and the value is an array of tables and fields to join 
-     * "conditions": Is an array of conditions to filter the data, where the type is the type of condition, the first value is the field and the second value is the value to compare, the separator is the separator of the conditions
+     * "fields": Is an array of tables and fields to get, where the table is the key of an array of fields, This can be a table name as a key for a string of fields separated by commas.
+     * "joins":  Is an array of tables and fields to join, hwere the key is the type of join and the value is an array of tables and fields to join.
+     * "condition": Is an array of conditions to filter the data, where the type is the type of condition, the first value is the field and the second value is the value to compare, the separator is the separator of the conditions
      * The type of conditions can be:
      * 
-     * *'COMPARE':* To compare values. This will be: ' = ? ' on the query statement.
+     * *'COMPARATIVE':* To compare values. This will be: ' = ? ' on the query statement.
      * 
      * *'SIMILAR':* To compare a value amoung. This will be: ' LIKE CONCAT('%', ?, '%') ' on the query statement.
      * 
@@ -106,7 +118,7 @@ class Context {
      * @param string $sortingby Order by of the rows to get. Accepted: A field name
      * @param string $grouping Group by of the rows to get. Accepted: A field name
      * @return array|null
-     * @link https://www.bytes4run.com/projects/context/select
+     * @link https://www.bytes4run.com/projects/sima/context/#select
      */
     protected function select (
         array $query, 
@@ -120,11 +132,11 @@ class Context {
             $this->table_name = $tableName;
         }
         if (empty($query)) {
-            $this->error = ["code" => 400, "message" => "The query is empty"];
-            return null;
+            $this->setError(["code" => 400, "message" => "The query is empty"]);
         } else {
             return $this->getDbData($query, $limit, $offset, $sorting, $sortingby, $grouping);
         }
+        return null;
     }
     /**
      * Function to insert data into the database using the parameters given by the user
@@ -135,16 +147,16 @@ class Context {
      * *'values':* This will be an array of values to be inserted in the data table.
      * @return array|null
      */
-    protected function insert (array $query, string $tableName): ?array {
+    protected function insert (array $query, string $tableName = ''): ?array {
         if (!empty($tableName)) {
             $this->table_name = $tableName;
         }
         if (!empty($query)) {
             return $this->setDbData('insert',$query['fields'],$query['values']);
         } else {
-            $this->error = ["code" => 400, "message" => "The query is empty"];
-            return null;
+            $this->setError(["code" => 400, "message" => "The query is empty"]);
         }
+        return null;
     }
     /**
      * Function to update data into the database using the parameters given by the user
@@ -192,21 +204,18 @@ class Context {
      * "separator" Have to be an array of separator for each condition, like: [Y,O] for AND y OR respectibly.
      * 
      * @param string $tableName
-     * @return array|null
+     * @return bool
      */
-    protected function update (array $query, array|string $parameters, string $tableName = ''): ?array {
+    protected function update (array $query, string $tableName = ''): bool {
         if (!empty($tableName)) {
             $this->table_name = $tableName;
         }
-        if (empty($parameters)) {
-            $this->error = ['code'=> 500, 'message'=> "The parameters are empty, this will cause a no good ending."];
-            return null;
-        }
         if (empty($query)) {
-            $this->error = ["code" => 400, "message" => "The query is empty"];
-            return null;
+            $this->setError(["code" => 400, "message" => "The query is empty"]);
+        } else {
+            return !is_null($this->setDbData('update',$query['fields'],$query['values'],$query['params'])) ?? false;
         }
-        return $this->setDbData('update',$query['fields'],$query['values'],$parameters);
+        return false;
     }
     /**
      * Function to delete data from the database using the parameters given by the user
@@ -261,10 +270,11 @@ class Context {
             $this->table_name = $tableName;
         }
         if (empty($query)) {
-            $this->error = ["code" => 400, "message" => "The query is empty"];
-            return null;
+            $this->setError(["code" => 400, "message" => "The query is empty"]);
+        } else {
+            return !is_null($this->setDbData("delete",parameters:$query['params'])) ?? false;
         }
-        return $this->setDbData($query);
+        return false;
     }    
     /**
      * Función que devuelve el cálculo de registros en la tabla sugerida, respetando la condición dada.
@@ -282,7 +292,7 @@ class Context {
      * "conditions": Is an array of conditions to filter the data, where the type is the type of condition, the first
      * value is the field and the second value is the value to compare, the separator is the separator of the conditions
      * The type of conditions can be:
-*
+     *
      *  *'COMPARE':* To compare values. This will be: ' = ? ' on the query statement.
      *
      *  *'SIMILAR':* To compare a value among. This will be: ' LIKE CONCAT('%', ?, '%') ' on the query statement.
@@ -325,6 +335,19 @@ class Context {
         return $this->getDBDataFunction($function, $field, $parameters);
     }
 
+    protected function custom (string $queryType, array $query): ?array
+    {
+        if (is_null($queryType) || empty($queryType)) {
+            $this->setError(["code" => 400, "message" => "The query type is empty"]);
+            return null;
+        }
+        if (is_null($query) || empty($query)) {
+            $this->setError(["code" => 400, "message" => "The query is empty"]);
+            return null;
+        }
+        return $this->customQuery($queryType, $query);
+    }
+
     /**
      * Function to set the database to be used.
      * @author Jorge Echeverria <jecheverria@bytes4run>
@@ -351,7 +374,7 @@ class Context {
         if (!empty($name) && !is_null($name)) {
             $this->table_name = $name;
         } else {
-            $this->error = ['status' => 500,'message' => "A table name is need it.", 'data' => array()];
+            $this->setError(['status' => 500,'message' => "A table name is need it.", 'data' => array()]);
         }
     }
 
@@ -362,7 +385,11 @@ class Context {
      */
     protected function find (string|array $field = 'all'): Context
     {
-        $this->fields = $field;
+        if (is_array($field)) {
+            $this->fields = $field;
+        } else {
+            $this->fields = explode(',',$field);
+        }
         return $this;
     }
 
@@ -373,7 +400,11 @@ class Context {
      * @return Context
      */
     protected function where (string|array $condition):Context {
-        $this->conditions = $condition;
+        if (is_array($condition)) {
+            $this->conditions = $condition;
+        } else {
+            $this->conditions = explode(',', $condition);
+        }
         return $this;
     }
 
@@ -392,12 +423,34 @@ class Context {
     }
 
     /**
+     * Function to group the result by a field
+     * @param string $groupby
+     * @return Context
+     */
+    protected function grouping (string $groupby = 'id'): Context {
+        $this->groupby = $groupby;
+        return $this;
+    }
+
+    /**
      * Funcion que devuelve los registros solicitados.
      * @param array|null $values
      * @return array|bool
      */
-    protected function get (array|null $values = null):array|bool {
+    protected function get (array|null $values = null): null|array|bool {
         return $this->_getDbData($values);
+    }
+
+    protected function set (array|object $values) : null|array {
+        return $this->_setDBData('insert', $values);
+    }
+
+    protected function edit (array|object $values) : null|array {
+        return $this->_setDBData('update', $values);
+    }
+
+    protected function remove (array|object $values) : null|array {
+        return $this->_setDBData('delete', $values);
     }
 
     /**
@@ -530,6 +583,20 @@ class Context {
     }
 
     /**
+     * Sets the error array with the given error.
+     *
+     * @param array $error The error to be set.
+     * @return void
+     */
+    private function setError (array $error): void {
+        if (!empty($this->error)) {
+            array_push($this->error, $error);
+        } else {
+            $this->error = $error;
+        }
+    }
+
+    /**
      * Function to get data from the database using the parameters given by the user
      * This can resolve an array of data or null if there is no data or error
      * @param array $query Array of parameters with the following
@@ -550,41 +617,66 @@ class Context {
     { 
         $this->query = "SELECT ";
         $this->fields = $query["fields"];
-        if (is_array($this->fields)) {
-            foreach ($this->fields as $table => $fields) {
-                if (is_array($fields)) {
-                    $this->query .= implode(",",$fields).",";
-                } else {
-                    $this->query .= $fields.",";
-                }
+        if (is_string($this->fields)) {
+            if ($this->fields == "all" || $this->fields == "*") {
+                $this->query .= "*";
+            } else {
+                $this->query .= $this->fields;
             }
         } else {
-            $this->query .= $this->fields;
-        }
-        $this->query = rtrim($this->query,",");
-        $this->query .= " FROM ".$this->table_name;
-        if (isset($query["joins"])) {
-            foreach ($query["joins"] as $type => $tables) {
-                $this->query .= " ".$type." ";
-                foreach ($tables as $table => $field) {
-                    $this->query .= $table." ON ".$field;
+            if (is_array($this->fields)) {
+                foreach ($this->fields as $table => $fields) {
+                    if (!empty($fields)) {
+                        foreach ($fields as $x => $field) {
+                            $asignado = explode("=", $field);
+                            $this->query .= (count($asignado) > 1) ? "`$table`.`$asignado[0]` AS '$asignado[1]'" : "`$table`.`$field`";
+                            if ($x < (count($fields) - 1)) {
+                                $this->query .= ", ";
+                            }
+                        }
+                        unset($field,$x);
+                    } else {
+                        $this->query .= "`$table`.*";
+                    }
                 }
+                unset($table, $fields);
+            } else {
+                $this->error = ['status'=>400,'message'=>"The fields type is not supported."];
+                return null;
             }
         }
-        if (isset($query["conditions"])) {
-            $this->query .= " WHERE ";
-            $this->conditions = $query["conditions"];
-            $separator = $query["conditions"]["separator"];
-            foreach ($this->conditions as $condition) {
-                foreach ($condition as $type => $values) {
-                    if (is_array($values)) {
-                        $this->query .= $values[0]." ".$type." ? ".$separator;
-                    } else {
-                        $this->query .= $values." ".$type." ? ".$separator;
+        $this->query .= " FROM ".$this->table_name;
+        if (isset($query["joins"]) && !empty($query['joins'])) {
+            /* $query['joins']=[
+                        'inner'=>[
+                            ['table1'=>'field1','table2'=>'field2'],
+                            ['table1'=>'field1','table2'=>'field2']
+                        ],
+                        'left'=>[
+                            ['table1'=>'field1','table2'=>'field2']
+                        ]
+                    ]
+            */
+            if (isset($query["joins"][0]['type'])) {
+                foreach ($query['joins'] as $join) {
+                    $this->query .= " $join[type] JOIN `$join[table]` ON `$join[table]`.`$join[filter]` = `$join[compare_table]`.`$join[compare_filter]`";
+                }
+            } else {
+                foreach ($query["joins"] as $type => $args) {
+                    foreach ($args as $tables) {
+                        $this->query .= " ".$type." JOIN ";
+                        $this->query .= "`" . key($tables[0]) . "`";
+                        $this->query .= " ON `" . key($tables[0]) . "`.`" . $tables[0] . "` = ";
+                        $this->query .= " `" . key($tables[1]) . "`.`" . $tables[1] . "`";
                     }
                 }
             }
-            $this->query = rtrim($this->query,$separator);
+        }
+        if (isset($query["params"])) {
+            $this->query .= " WHERE ";
+            $conditions = $this->getConditions($query['params']);
+            $this->conditions = (isset($conditions['values']) && !empty($conditions['values'])) ? $conditions['values'] : [];
+            $this->query .= $conditions['string'];
         }
         if ($orderby) {
             $this->query .= " ORDER BY ".$orderby." ".$order;
@@ -599,13 +691,13 @@ class Context {
             $this->query .= " OFFSET ".$offset;
         }
         $connection = new Connection($this->base_name);
-        $result = $connection->query($this->query);
-        if ($result) {
-            return $result;
+        $result = $connection->getResponse("select",['str_prepared' => $this->query, 'stm_values' => !empty($this->conditions) ? $this->conditions : []]);
+        if (!is_null($result)) {
+            return $this->interpretateResponse("select",$result);
         } else {
-            $this->error = $connection->getError();
-            return null;
+            $this->setError($connection->getError());
         }
+        return null;
     }
 
     /**
@@ -621,44 +713,58 @@ class Context {
         string $type = "insert", 
         array $fields = [], 
         array $values = [], 
-        array $parameters = []): ?array
+        array $parameters = [],
+        bool $force = false
+    ): ?array
     {
-        $this->query = "INSERT INTO ".$this->table_name." (";
-        $this->query .= implode(",",$fields).") VALUES (";
-        foreach ($values as $index => $value) {
-            $this->query .= ($index < count($values) - 1) ? "?,":"?";
-            array_push($queryArray,$value);
-        }
-        $this->query = rtrim($this->query,",");
-        $this->query .= ")";
-        if ($type == "update") {
-            $this->query = "UPDATE ".$this->table_name." SET ";
-            foreach ($fields as $index => $field) {
-                $this->query .= ($index < count($field) - 1) ? "?,":"?";
+        $queryArray = [];
+        if ($type == "insert") {
+            $this->query = "INSERT INTO `" . $this->table_name . "` (";
+            foreach($fields as $index => $field) {
+                $this->query .= ($index < (count($fields) - 1)) ? "`" . $field . "`," : "`" . $field . "`";
+            }
+            $this->query .= ") VALUES (";
+            foreach ($values as $index => $value) {
+                $this->query .= ($index < (count($values) - 1)) ? "?,":"?";
                 array_push($queryArray,$value);
             }
-            $this->query = rtrim($this->query,",");
-            if (!empty($parameters)) {
-            $this->query .= " WHERE ";
-            $conditions = $this->getConditions($parameters);
-            $this->query .= $conditions['cadena'];
-            $queryArray = array_merge($queryArray,$conditions['valores']);
-        }
-        }
-        if ($type == "delete") {
-            $this->query = "DELETE FROM ".$this->table_name;
+            $this->query .= ")";
+        } elseif ($type == "update") {
+            $this->query = "UPDATE `" . $this->table_name . "` SET ";
+            foreach ($fields as $index => $field) {
+                $this->query .= ($index < count($field) - 1) ? "`$field` = ?," : "`$field` = ?";
+                array_push($queryArray,$values[$index]);
+            }
             if (!empty($parameters)) {
                 $this->query .= " WHERE ";
                 $conditions = $this->getConditions($parameters);
-                $this->query .= $conditions['cadena'];
-                $queryArray = array_merge($queryArray,$conditions['valores']);
+                $this->query .= $conditions['string'];
+                $queryArray = array_merge($queryArray,$conditions['values']);
+            } else {
+                if (!$force) {
+                    $this->setError(["code" => 400, "message" => "BECAREFUL: The conditions are empty..!\n" . $this->query ."\nUse 'force=true' to force the execution"]);
+                    return null;
+                }
+            }
+        } elseif ($type == "delete") {
+            $this->query = "DELETE FROM `$this->table_name`";
+            if (!empty($parameters)) {
+                $this->query .= " WHERE ";
+                $conditions = $this->getConditions($parameters);
+                $this->query .= $conditions['string'];
+                $queryArray = array_merge($queryArray,$conditions['values']);
+            } else {
+                if (!$force) {
+                    $this->setError(["code" => 400, "message" => "BECAREFUL: The conditions are empty..!\n" . $this->query ."\nUse 'force=true' to force the execution"]);
+                    return null;
+                }
             }
         }
         $this->query .= ";";
         $connection = new Connection($this->base_name);
-        $result = $connection->query($this->query);
-        if ($result) {
-            return $result;
+        $result = $connection->getResponse($type,['str_prepared' => $this->query, 'stm_values' => $queryArray]);
+        if (!is_null($result)) {
+            return $this->interpretateResponse($type,$result);
         } else {
             $this->error = $connection->getError();
             return null;
@@ -666,16 +772,16 @@ class Context {
     }
     /**
      * Function to get the conditions to be used in the query
-     * @param array $parameters
+     * @param array $conditions
      * @return array
      */
     private function getConditions(array $conditions): array {
-        $cadena = "";
-        $valores = [];
-        if (isset($arreglo['condition']) && !empty($arreglo['condition'])) {
-            foreach ($arreglo['condition'] as $indice => $cond) {
+        $string = "";
+        $values = [];
+        if (isset($conditions['condition']) && !empty($conditions['condition'])) {
+            foreach ($conditions['condition'] as $indice => $cond) {
                 if ($indice > 0) {
-                    $separador = ($arreglo['separator'][($indice - 1)]) ?? null;
+                    $separador = ($conditions['separator'][($indice - 1)]) ?? null;
                     if (isset($separador) && !is_null($separador)) {
                         switch ($separador) {
                             case "Y":
@@ -743,7 +849,7 @@ class Context {
                 }
             }
         }
-        return ['cadena' => $string, 'valores' => $values];
+        return ['string' => $string, 'values' => $values];
     }
 
     /**
@@ -780,4 +886,105 @@ class Context {
         return $this->getDBData($this->fields, $this->limit, $this->order, $this->orderby);
     }
 
+    /**
+     * Obtiene la cuenta, suma, promedio, mínimo o máximo de un campo de una tabla.
+     *
+     * @param string $table Tabla a realizarle la consulta.
+     * @param string $campo Campo por el cual se realizará la consulta.
+     * @param array $condicion [$params => [condicion=[['table','type','field','value']], separador=[Y]]] Condición y separador para la consulta.
+     * @return array
+     */
+    private function getDBDataFunction($function, $campo, $condicion)
+    {
+        $values = [];
+        $string = "SELECT ";
+        switch ($function) {
+            case "min":
+                $string .= "MIN";
+                break;
+            case "max":
+                $string .= "MAX";
+                break;
+            case "avg":
+                $string .= "AVG";
+                break;
+            case "sum":
+                $string .= "SUM";
+                break;
+            case "dist":
+                $string .= "DISTINCT";
+                break;
+            default:
+                $string .= "COUNT";
+                break;
+        }
+        if ($function != "dist") {
+            $string .= "(?) AS 'res' FROM `" . $this->table_name . "`";
+            $values[] = "`" . $this->table_name . "`.`" . $campo . "`";
+        } else {
+            $string .= "(`$campo`) FROM `$this->table_name`";
+        }
+        if (!is_null($condicion)) {
+            $string .= " WHERE ";
+            $conditions = $this->getConditions($condicion);
+            $string .= $conditions['string'];
+            foreach ($conditions['values'] as $item) {
+                array_push($values, $item);
+            }
+        }
+        $string .= ";";
+        $connection = new Connection($this->base_name);
+        return $this->interpretateResponse('select', 
+            $connection->getResponse('select', 
+                [
+                    'str_prepared' => $string, 
+                    'stm_values' => $values
+                ]));
+    }
+
+    private function interpretateResponse (string $request,array $response):array {
+        $result = ['status'=>$response['status'],'message'=>$response['message']];
+        $result['data'] = match ($request) {
+            "select" => $response['data']['rows'],
+            "insert" => $response['data']['id'],
+            "update" => $response['data']['affected'],
+            "delete" => $response['data']['affected'],
+            default  => $response['data'],
+        };
+        return $result;
+    }
+
+    /**
+     * Esta funcion resuelve las peticiones personalizadas del usuario
+     *
+     * @param string $tipo
+     * @param array $query
+     * @return array
+     */
+
+     private function customQuery(string $type, array $query):array|null
+     {
+         $queryValues = [];
+         $queryPrepared = "";
+         if (is_string($query['string'])) {
+             $queryPrepared = $query['string'];
+         } else {
+             $this->error = ['status'=>400,'message'=>"The query string is not valid"];
+             return null;
+         }
+         if (isset($query['values']) && !empty($query['values'])) {
+             $queryValues = $query['values'];
+         }
+         $connection = new Connection($this->base_name);
+         $result = $connection->getResponse($type, [
+             'str_prepared' => $queryPrepared,
+             'stm_values' => $queryValues
+         ]);
+         if (!is_null($result)) {
+             return $this->interpretateResponse($type, $result);
+         } else {
+             $this->setError($connection->getError());
+         }
+         return null;
+     }
 }

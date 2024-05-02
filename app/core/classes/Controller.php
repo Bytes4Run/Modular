@@ -52,9 +52,9 @@ class Controller {
     }
     private function getComponent(string $moduleName, string $type = "controller", string $componentName = null): object {
         $moduleName = ucfirst($moduleName);
-        if (is_null($componentName)) {
-            $componentName = $moduleName;
-        }
+        $componentName = (is_null($componentName)) 
+            ? $moduleName 
+            : ucfirst($componentName);
         $path = match ($type) {
             "model"   => "Modules/$moduleName/models/" . $componentName . "Model",
             default   => "Modules/$moduleName/controllers/" . $componentName . "Controller",
@@ -85,7 +85,6 @@ class Controller {
             if (empty($breadcrumbs)) {
                 $breadcrumbs = $this->createBreadcrumbs($name);
             }
-
         }
         return [
             'view' => [
@@ -158,11 +157,9 @@ class Controller {
                 $ctr = $child['module'];
                 $mtd = $child['method'];
                 if (isset($child['params'])) {
-                    if (is_array($child['params'])) {
-                        $prm = implode("|", $child['params']);
-                    } else {
-                        $prm = $child['params'];
-                    }
+                    $prm = (is_array($child['params'])) 
+                        ? implode("|", $child['params'])
+                        : $child['params'];
                 }
                 array_push($routes, [
                     'text' => $mdl,
@@ -234,5 +231,24 @@ class Controller {
                 ],
             ];
         }
+    }
+    /**
+     * Generates a JSON response based on the provided data array.
+     *
+     * @param array $data The data array containing the response data.
+     * @return array The JSON response array with the response type and encoded data.
+     */
+    protected function json (array $data) {
+        $code = (isset($data['status'])) ? $data['status'] : $data['data']['code'];
+        http_response_code(intval($code));
+        return array('json',json_encode($data, JSON_PRETTY_PRINT));
+    }
+    /** 
+     * Function to Redirect to another page given
+     * @param string $url
+     */
+    protected function redirect(string $url) {
+        http_response_code(301);
+        return array('redirect',$url);
     }
 }

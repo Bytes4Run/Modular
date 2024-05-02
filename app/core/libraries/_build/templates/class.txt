@@ -3,7 +3,7 @@
  * {name}
  * @description {name} class for manage {name}
  * @author Jorge Echeverria <jecheverria@bytes4run.com>
- * @category Model
+ * @category {type}
  * @package Modules\{name}\{type}s\{name}
  * @version 1.0.0
  * @date {date}

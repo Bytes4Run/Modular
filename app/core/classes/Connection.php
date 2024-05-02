@@ -61,29 +61,79 @@ use Kernel\helpers\Config;
      * @var string
      */
     private string $charset;
+
+    /**
+     * Function constructor
+     *
+     * @param null|string $database
+     * @return void
+     */
+    public function __construct(?string $database = null) {
+        if (!is_null($database)) {
+            $conf = $this->getConfig($database);
+            if (!$conf) {
+                $this->setError(['code' => 500, 'message' => 'Error gettind Database configuration']);
+            }
+        }
+    }
+    /**
+     * Function to get the error from the Connection class
+     * 
+     * @return null|array
+     */
+    public static function getError(): null|array {
+        return self::$error;
+    }
     /**
      * Function to get database response after connection
      * 
      * @param string $type Type of statement to execute
      * @param array $query Query to execute
-     * @param string $dbName Database name
-     * @return array
+     * @param null|string $dbName Database name
+     * @return null|array
      */
-    protected function getResponse (string $type, array $query,string $dbName) {
-        return $this->getDbResponse($type, $query, $dbName);
+    public function getResponse (string $type, array $query,?string $dbName=null):null|array {
+        if (!is_null($dbName)) {
+            $conf = $this->getConfig($dbName);
+            if (!$conf) {
+                $this->setError(['code' => 500, 'message' => 'Error gettind Database configuration']);
+                return null;
+            }
+        }
+        if (empty($type)) {
+            $this->setError(['code'=>500,'message'=>"Error initializing query, query type is need it."]);
+            return null;
+        }
+        if (empty($query)) {
+            $this->setError(['code'=>500,'message'=>"Error initializing query, query is need it."]);
+            return null;
+        }
+        return $this->getDbResponse($type, $query);
+    }
+    private function setError (array $error): void {
+        if (!empty($this->error)) {
+            $this->error = array_push($this->error, $error);
+        } else {
+            $this->error = $error;
+        }
     }
     /**
      * Function to stablish the connection to the database
      * @return PDO|bool
      */
     private function stablishConnection (): PDO|bool {
-        $this->error = null;
         try {
-            $this->connection = new PDO("mysql:host=$this->host;port=$this->port;dbname=$this->database;charset=$this->charset", $this->user, $this->password);
+            $this->connection = new PDO(
+                "mysql:host=$this->host;
+                 port=$this->port;
+                 dbname=$this->database;
+                 charset=$this->charset", 
+                $this->user,
+                $this->password);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $this->connection;
         } catch (PDOException $e) {
-            $this->error = ['code'=>$e->getCode(),'message' => $e->getMessage()];
+            $this->setError(['code'=>$e->getCode(),'message' => $e->getMessage()]);
             return false;
         }
     }
@@ -102,11 +152,10 @@ use Kernel\helpers\Config;
             $this->charset = $_ENV['APP_DB_CHARSET'];
             $this->password = $_ENV['APP_DB_PASS'];
             $this->database = $_ENV['APP_DB_NAME'];
-            return true;
         } else {
             $conf = new Config();
             $dbConfig = $conf->get($dbName, 'json');
-            if ($dbConfig['type'] == "error") {
+            if (isset($dbConfig['type']) && $dbConfig['type'] == "error") {
                 $this->error = $dbConfig;
                 return false;
             } else {
@@ -115,9 +164,9 @@ use Kernel\helpers\Config;
                 $this->port = $dbConfig['dbport'];
                 $this->charset = $dbConfig['dbcharset'];
                 $this->password = $dbConfig['dbpassword'];
-                return true;
             }
         }
+        return true;
     }
     /**
      * Function to get database response after connection
@@ -127,46 +176,47 @@ use Kernel\helpers\Config;
      * @param string $dbName Database name
      * @return array|null
      */
-    private function getDbResponse(string $type, array $query, string $dbName): array|null
+    private function getDbResponse(string $type, array $query): array|null
     {
-        $this->error = null;
         $id = null;
         $rows = null;
         $affected = null;
-        if ($this->getConfig($dbName)) {
-            if ($this->stablishConnection()) {
-                try {
-                    $stmt = $this->connection->prepare($query['string']);
-                    $stmt->execute($query['params']);
-                    if ($type == "insert") {
-                        $id = $this->connection->lastInsertId();
-                    }
-                    if ($type == "update" || $type == "delete") {
-                        $affected = $stmt->rowCount();
-                    }
-                    if ($type == "select") {
-                        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    }
-                    return [
-                        'status' => 'success',
-                        'message' => 'Query executed successfully',
-                        'data' => [
-                            'id' => $id,
-                            'rows' => $rows,
-                            'affected' => $affected,
-                        ],
-                    ];
-                } catch (PDOException $e) {
-                    $this->error = ['code' => $e->getCode(), 'message' => $e->getMessage()];
-                    return null;
+        if ($this->stablishConnection()) {
+            try {
+                $stmt = $this->connection->prepare($query['string']);
+                $stmt->execute($query['params']);
+                if ($type == "insert") {
+                    $id = $this->connection->lastInsertId();
                 }
-            } else {
-                $this->error = ['code' => 500, 'message' => 'Error connecting to the database'];
-                return null;
+                if ($type == "update" || $type == "delete") {
+                    $affected = $stmt->rowCount();
+                }
+                if ($type == "select") {
+                    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+                return [
+                    'status' => 'success',
+                    'message' => 'Query executed successfully',
+                    'data' => [
+                        'id' => $id,
+                        'rows' => $rows,
+                        'affected' => $affected,
+                    ],
+                ];
+            } catch (PDOException $e) {
+                $this->setError(['code' => $e->getCode(), 'message' => $e->getMessage()]);
             }
         } else {
-            $this->error = ['code' => 500, 'message' => 'Error getting database configuration'];
-            return null;
+            $this->setError(['code' => 500, 'message' => 'Error connecting to the database']);
+        }
+        return null;
+    }
+    /**
+     * Function destructor
+     */
+    private function __destruct() {
+        if (!is_null($this->connection)) {
+            $this->connection = null;
         }
     }
 }

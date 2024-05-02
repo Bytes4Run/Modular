@@ -37,4 +37,7 @@ class Request {
     public static function getHttpHost() {
         return $_SERVER['HTTP_HOST'];
     }
+    public static function getHeaders () {
+        return getallheaders();
+    }
 }

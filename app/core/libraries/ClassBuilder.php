@@ -35,7 +35,8 @@ class ClassBuilder
             'class' => $this->buildClass($values[2], $values[3] ?? null, $values[4] ?? null),
             default => "The type $values[1] is not valid\n",
         };
-    }/**
+    }
+    /**
      * Prints a help message for the class builder CLI mode.
      *
      * @return string
@@ -71,8 +72,8 @@ class ClassBuilder
             ob_start();
             include "_build/templates/_model_components.php";
             $model_components = ob_get_clean();
-            $model_basic = str_replace('{name}', $name, $model_components);
-            $model = str_replace('{content}', $model_components, $model_basic);
+            $content = str_replace('{name}', $name, $model_components);
+            $model = str_replace('{content}', $content, $model_basic);
         } else {
             $content = "    public function __construct(int \$id = null) {\n";
             $content .= "        parent::__construct();\n";
@@ -167,8 +168,8 @@ class ClassBuilder
             ob_start();
             include "_build/templates/_controller_components.php";
             $controller_components = ob_get_clean();
-            $controller_basic = str_replace('{name}', $name, $controller_components);
-            $controller = str_replace('{content}', $controller_components, $controller_basic);
+            $content = str_replace('{name}', $name, $controller_components);
+            $controller = str_replace('{content}', $content, $controller_basic);
         } else {
             // Constructor
             $content = "    public function __construct(int \$id = null) {\n";
