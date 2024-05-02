@@ -33,9 +33,14 @@ class Messenger
     }
     public function json(array $data):array
     {
+        $type = "error";
         if ($data['status'] === 200) {
             $type = "success";
-        };
+        } elseif ($data['status'] < 400) {
+            $type = "info";
+        } elseif ($data['status'] < 500) {
+            $type = "warning";
+        }
         return $this->build($type, $data);
     }
     public function message (string $type = 'info', string | array $data = '')
