@@ -5,7 +5,7 @@
     require '../vendor/autoload.php';
 
     # NameSpace For main root loader
-    use B4R\App;
+    use App\App;
     
     # Instance of App to Initialize the application and apply authorization and cors resolution
     $app = new App();
