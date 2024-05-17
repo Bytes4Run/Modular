@@ -14,7 +14,7 @@
         "skeleton"
     ],
     "require": {
-        "php": "^8.1",
+        "php": ">=8.1",
         "smarty/smarty": "^4.3",
         "vlucas/phpdotenv": "^5.6",
         "firebase/php-jwt": "^6.10",
@@ -57,7 +57,7 @@
     "prefer-stable": true,
     "source": {
         "type": "git",
-        "url": "https://github.com/repository/bytes4run/modular.git",
+        "url": "https://github.com/bytes4run/modular.git",
         "reference": "0.0.1"
     },
     "scripts": {
